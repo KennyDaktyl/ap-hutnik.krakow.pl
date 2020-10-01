@@ -1,0 +1,31 @@
+{% extends 'page_ap/base.html' %}
+{% load crispy_forms_tags %}
+{% crispy upload_form.helper %}
+
+{% block content %}
+<div class="container">
+    <div class="row col-12 mt-2">
+        {% if form.errors %}
+        <p class="col-12 text-center mx-auto text-primary">
+            {% for key,value in upload_form.errors.items %}
+            <li class="text-primary">{{ key|escape }} : {{ value|escape }}</li>
+            {% endfor %}
+        </p>
+        {% else %}
+        <p class="col-12 text-center mx-auto text-primary">Wypełnij poniższy formularz.</p>
+        {% endif %}
+        <h3 class="col-12 mx-auto text-center mt-3">Załaduj plik</h3>
+        <form method="POST" enctype="multipart/form-data" class="col-12 mx-auto text-center uniForm">
+            {% csrf_token %}
+            {{ upload_form|crispy }}
+            <button class="btn btn-primary form-control " type="submit" value="submit">Upload</button>
+        </form>
+    </div>
+</div>
+<div class="col-12">
+
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

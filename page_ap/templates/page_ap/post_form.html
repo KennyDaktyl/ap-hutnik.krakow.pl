@@ -1,0 +1,35 @@
+{% extends 'page_ap/base.html' %}
+{% load crispy_forms_tags %}
+{% crispy form.helper %}
+
+{% block content %}
+<div class="container">
+    <div class="row col-12 mt-2">
+        <form method="POST" enctype="multipart/form-data" class="col-12 mx-auto text-center uniForm">
+
+            {% csrf_token %}
+            {{ form|crispy }}
+            <!-- <div class="m-2 p-1 mx-auto text-center text-white">
+                {{ form.title|as_crispy_field}}
+            </div>
+            <div class="m-2 p-1 mx-auto text-center text-white">
+                {{ form.photo|as_crispy_field}}
+            </div>
+            <div class="m-2 p-1 mx-auto text-center text-white">
+                {{ form.team|as_crispy_field}}
+            </div>
+            <div class="m-2 p-1 mx-auto text-center text-white" style="min-height: 300px;">
+                {{ form.body|as_crispy_field}}
+            </div> -->
+
+            <input type="submit" value="dodaj">
+        </form>
+    </div>
+</div>
+<div class="col-12">
+
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

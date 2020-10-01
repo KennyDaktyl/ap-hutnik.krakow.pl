@@ -1,0 +1,38 @@
+{% extends 'page_ap/base.html' %}
+{% load crispy_forms_tags %}
+{% crispy form.helper %}
+{% load thumbnail %}
+
+{% block content %}
+<div class="container">
+    <div class="row col-12 mt-2 mx-auto">
+        <form method="POST" enctype="multipart/form-data" class="col-lg-6 mx-auto text-center uniForm">
+            <div class="col-lg-8 row mx-auto text-center m-0 p-1">
+                {% csrf_token %}
+                {{ form|crispy }}
+            </div>
+            <div class="col-lg-8 row mx-auto text-center m-0 p-1">
+                <input class="col-12" type="submit" value="dodaj zdjęcie">
+            </div>
+        </form>
+    </div>
+</div>
+<div class="col-lg-8 row mx-auto text-center m-0 p-1">
+    <a class="col-lg-6 mt-3 mx-auto" href="{% url 'posts' %}"><button class="col-12 mr-auto btn btn-success">Zakończ i
+            przejdź
+            do aktualności</button></a>
+</div>
+
+<div class="col-lg-11 row mx-auto text-center m-0 p-1 d-flex align-items-start">
+    {% for image in images_post %}
+    {% thumbnail image.image "640" crop='center' format="WEBP" as im %}
+    <source srcset="{{ im }}.webp" type="image/webp">
+    <img class="col-4 m-0 p-1 mx-auto" src="{{ MEDIA_URL }}{{im}}" alt="" title="">
+    {% endthumbnail %}
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'page_ap/base.html' %}
+{% load crispy_forms_tags %}
+{% crispy email_form.helper %}
+
+{% block content %}
+<div class="container">
+    <div class="row col-12 mt-2">
+        {% if email_form.errors %}
+        <p class="col-12 text-center mx-auto text-primary">
+            {% for key,value in email_form.errors.items %}
+            <li class="text-primary mx-auto text-center">{{ key|escape }} : {{ value|escape }}</li>
+            {% endfor %}
+        </p>
+        {% else %}
+        <p class="col-12 text-center mx-auto text-primary">Wypełnij poniższy formularz.</p>
+        {% endif %}
+        <h3 class="col-12 mx-auto text-center mt-3">Wyślij wiadomość</h3>
+        <form method="POST" enctype="multipart/form-data" class="col-12 mx-auto text-center uniForm">
+            {% csrf_token %}
+            <div class="col-12 mx-auto text-center row mb-3">
+                <div class="col-lg-8 mx-auto text-center">
+                    {{ email_form.groups|as_crispy_field}}
+                </div>
+                <div class="col-lg-8 mx-auto text-center row">
+                    {{ email_form.email|as_crispy_field}}
+                </div>
+                <div class="col-lg-8 mx-auto text-center">
+                    {{  email_form.subject|as_crispy_field}}
+                </div>
+                <div class="col-lg-8 mx-auto text-center">
+                    {{  email_form.message|as_crispy_field}}
+                </div>
+                <div class="col-lg-8 mx-auto text-center">
+                    {{  email_form.file|as_crispy_field}}
+                </div>
+                <div class="col-12 col-lg-6 mx-auto text-center">
+                    {{  email_form.captcha|as_crispy_field}}
+                </div>
+            </div>
+            <div class="col-12 mx-auto text-center mt-3">
+                <p id="button" class="col-12 text-center mx-auto h-100"><input class="mx-auto text-center col-12"
+                        type="submit" value="Wyślij email"></p>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="col-12">
+
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

@@ -1,0 +1,184 @@
+{% extends "page_ap/base.html" %}
+{% load templatetag %}
+{% load social_share %}
+
+{% block head %}
+<meta property="fb:app_id" content="{{app_id}}" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="{{request.build_absolute_uri}}" />
+<meta property="og:title" content="{{post.title}}" />
+<meta property="og:image" content="https://ap-hutnik.krakow.pl{{ MEDIA_URL }}{{post.photo}}" />
+<meta property="og:description" content="{{post.body}}" />
+<meta name="description" content="Artykuł Akademii Piłkarskiej Hutnika Kraków o tytule {{post.title}}">
+{% endblock %}
+
+{% block title %}{{post.title}}{% endblock %}
+
+{% block content %}
+
+<article class="col-10 mx-auto p-0 m-0 text-center row">
+
+    <div class="col-12 card mb-3 mt-3 mx-auto ml-0 mr-0 p-0">
+        <div class="row no-gutters d-flex align-items-start m-0 p-0">
+            <div class="col-md-4">
+                {% load thumbnail %}
+                {% thumbnail post.photo "1280" crop='center' format="WEBP"  as im %}
+                <a href="{{ MEDIA_URL }}{{im}}" data-lightbox="{{post.id}}" data-title="{{post.title}}"
+                    class="col-4 col-lg-3 mx-auto text-center p-0 m-0">
+                    <source srcset="{{ im }}" type="image/webp">
+                    <div class="">
+                        {% thumbnail post.photo "400" crop='center' format="WEBP"  as im %}
+                        <source srcset="{{ im }}" type="image/webp" />
+                        <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}"
+                            alt="Główne zdjęcie artykułu Akademii Piłkarskiej Hutnika Kraków o tytule {{post.title}}"
+                            title="Główne zdjęcie artykułu Akademii Piłkarskiej Hutnika Kraków o tytule {{post.title}}">
+                        {% endthumbnail %}
+                    </div>
+                </a>
+                {% endthumbnail %}
+            </div>
+            <div class="col-md-8 mx-auto text-center row">
+                <p class="card-text text-left ml-2 col-5"><small class="text-muted">
+                        {% if post.team %}
+                        Post drużyny: {{post.team}}
+                        {% else %}
+                        Post: ogólny
+                        {% endif %}
+
+                    </small></p>
+                <p class="count ml-auto text-right col-5 ">
+                    <small class="total text-muted">{{total_views}} wyświetleń</small>
+                </p>
+                <div class="card-body col-12 mx-auto text-center m-0 p-0">
+                    <h5 class="card-title font-weight-bold">{{post.title|upper}}</h5>
+                    <p class="card-text m-0 p-2">{{post.body|safe}}</p>
+                    <p class="card-text"><small class="text-muted">Autor: {{post.author.first_name}}
+                            {{post.author.last_name}}, data:
+                            {{post.created}}</small></p>
+                </div>
+
+            </div>
+        </div>
+        <div class="text-right fb-share-button" data-href="{{request.build_absolute_uri}}" data-layout="button_count">
+        </div>
+    </div>
+
+    <!-- Load Facebook SDK for JavaScript -->
+    <div id="fb-root"></div>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+
+    <!-- Your share button code -->
+
+</article>
+
+<div class="col-11 row mx-auto text-center">
+    <h3 class="col-12 mx-auto text-center">GALERIA ZDJĘĆ</h3>
+    {% load thumbnail %}
+    {% for image in images_post %}
+    {% thumbnail image.image "350" crop='center' format="WEBP"  as im %}
+    <a href="{{ MEDIA_URL }}{{image.image}}" data-lightbox="{{post.id}}" data-title="{{post.title}}"
+        class="col-4 mt-3 col-lg-2 mx-auto text-center p-0 m-0">
+        <source srcset="{{ im }}" type="image/webp">
+        <div class="">
+            {% thumbnail image.image "250x200" crop='center' format="WEBP"  as im %}
+            <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}"
+                alt="Zdjęcie z galerii artykułu Akademii Piłkarskiej Hutnika Kraków o tytule {{post.title}}" title="">
+            {% endthumbnail %}
+        </div>
+    </a>
+    {% endthumbnail %}
+    {% empty %}
+    <h5 class="col-12 mx-auto text-center">Brak zdjęć w galerii</h5>
+    {% endfor %}
+
+</div>
+
+<div class="col-12 input-group mb-3 mx-auto text-center text-wrap nav-scroller py-1 mb-2 nav_pagi">
+    <div class=""></div>
+    <nav aria-label="..." class="nav d-flex justify-content-center mx-auto text-center">
+        {% if images_post.has_other_pages %}
+        <ul class="pagination text-dark pagination pagination-lg flex-wrap text-wrap mx-auto text-center">
+            {% if images_post.has_previous %}
+            <li class="page-item">
+                <a class="page-link text-primary"
+                    href="?{% query_transform page=images_post.previous_page_number %}">Poprzednia</a>
+            </li>
+            <li class="page-item"><a class="page-link text-primary"
+                    href="?{% query_transform page=images_post.previous_page_number %}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span></span></li>
+            {% endif %}
+            {% for i in images_post.paginator.page_range %}
+            {% if images_post.number == i %}
+            <li class="page-item text-light text-primary active">
+                <span class="page-link text-light text-primary">
+                    {{ i }}
+                    <span class="sr-only text-dark">(current)</span>
+                </span>
+            </li>
+            {% else %}
+            <li class="page-item text-primary"></li><a class="page-link text-primary"
+                href="?{% query_transform  page=i  %}">{{ i }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if images_post.has_next %}
+            <li class="page-item text-primary"><a class="page-link text-primary"
+                    href="?{% query_transform page=images_post.next_page_number %}">&raquo;</a>
+            </li>
+
+            <li class="page-item text-primary ">
+                <a class="page-link text-primary"
+                    href="?{% query_transform page=images_post.next_page_number %}">Następna</a>
+            </li>
+            {% else %}
+            <li class="disabled"><span></span></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </nav>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org/",
+        "@type": "Article",
+        "headline": "{{post.title|slice:110}}",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://ap-hutnik.krakow.pl{{ MEDIA_URL }}{{post.photo}}",
+            "width": "",
+            "height": ""
+        },
+        "author": {
+            "@type": "Person
+            "name": "{{post.author.first_name}} {{post.author.last_name}}"
+        },
+        ",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Akademia Piłkarska Hutnik Kraków",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://ap-hutnik.krakow.pl/media/images/flaga_akademi.webp",
+                "width": "",
+                "height": ""
+            }
+        },
+        "datePublished": "{{post.created}}"
+    }
+</script>
+{% endblock %}

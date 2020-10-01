@@ -1,0 +1,101 @@
+{% extends "page_ap/base.html" %}
+
+{% block head %}
+<meta property="fb:app_id" content="{{app_id}}" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Obiekt Akademii Piłkarskiej Hutnik Kraków {{building.name}}">
+<meta property="og:url" content="{{request.build_absolute_uri}}" />
+<meta property="og:title" content="Oficjalna strona Akademii Piłkarskiej Hutnik Kraków" />
+<meta property="og:image" content="https://ap-hutnik.krakow.pl{{ MEDIA_URL }}/{{building.photo}}" />
+<meta property="og:description" content="Obiekt Akademii Piłkarskiej Hutnika Kraków" />
+<meta name="description"
+    content="Akademia Piłkarska Hutnika Kraków posiada wiele własnych obiektów do szkolenia młofych piłkarzy. Przedstawiamy jeden z naszych obiektów {{building.name}}">
+{% endblock %}
+
+{% block title %}Obiekt Akademii Piłkarskiej {{building.name}}{% endblock %}
+
+{% block content %}
+{% load thumbnail %}
+<article class="col-lg-10 mx-auto p-0 m-0 text-center row">
+    <div class="card mb-3 mt-3 mx-auto col-12">
+        <div class="row no-gutters col-12 m-1 p-1">
+            <div class="col-lg-4">
+                {% if building.photo %}
+                {% if building.photo|is_portrait %}
+                <div class="portrait">
+                    {% thumbnail building.photo "960" crop='center' format="WEBP"  as im %}
+                    <a href="{{ MEDIA_URL }}{{im}}" data-lightbox="{{building.id}}" data-title="{{building.name}}"
+                        class="col-4 col-lg-3 mx-auto text-center p-0 m-0">
+                        <source srcset="{{ im }}" type="image/webp">
+                        <div class="m-1">
+                            {% thumbnail building.photo "400" crop='center' format="WEBP"  as im %}
+                            <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}"
+                                alt="Zdjęcie jednego z obiektów Akademii Piłkarskiej Hutnika Kraków o nazwie {{building.name}}"
+                                title="Główne zdjęcie obiektu Akademii Piłkarskiej Hutnika Kraków o nazwie {{building.name}}">
+                            {% endthumbnail %}
+                        </div>
+                    </a>
+                    {% endthumbnail %}
+                </div>
+                {% else %}
+                <div class="landscape">
+                    {% thumbnail building.photo "960" crop='center' format="WEBP"  as im %}
+                    <a href="{{ MEDIA_URL }}{{im}}" data-lightbox="{{building.id}}" data-title="{{building.name}}"
+                        class="col-4 col-lg-3 mx-auto text-center p-0 m-0">
+                        <source srcset="{{ im }}" type="image/webp">
+                        <div class="m-1">
+                            {% thumbnail building.photo "400" crop='center' format="WEBP"  as im %}
+                            <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}"
+                                alt="Zdjęcie jednego z obiektów Akademii Piłkarskiej Hutnika Kraków o nazwie {{building.name}}"
+                                title="">
+                            {% endthumbnail %}
+                        </div>
+                    </a>
+                    {% endthumbnail %}
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="portrait">
+                    {% thumbnail building.no_image.image "200x200" crop='center' format="WEBP"  as im %}
+                    <source srcset="{{ im }}" type="image/webp">
+                    <img class="card-img-top m-1" src="{{ MEDIA_URL }}{{im}}"
+                        alt="Domyślna grafika oznaczająca brak zdjęcia" title="">
+                    {% endthumbnail %}</div>
+                {% endif %}
+
+            </div>
+            <div class="col-lg-8 mx-auto text-center m-0 p-0">
+                <div class="card-body text-center col-12 m-0 p-0 mt-2">
+                    <h4 class="card-title">{{building.name}}</h4>
+                    <h5 class="card-title">{{building.get_status_display}}</h5>
+                    <p class="card-text"><small class="text-muted">Rozmiar: {{building.size}}
+                        </small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+
+<div class="col-11 row mx-auto text-center">
+    <h3 class="col-12 mx-auto text-center">GALERIA ZDJĘĆ</h3>
+    {% load thumbnail %}
+    {% for image in images_building %}
+    {% thumbnail image.image "280x240" crop='center' format="WEBP"  as im %}
+    <a href="{{ MEDIA_URL }}{{image.image}}" data-lightbox="{{building.id}}" data-title="{{building.name}}"
+        class="mx-auto text-center p-0 m-0">
+        <source srcset="{{ im }}" type="image/webp">
+        <div class="">
+            {% thumbnail image.image "150x120" crop='center' format="WEBP"  as im %}
+            <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}"
+                alt="Zdjęcie z galerii obiektów Akademii Piłkarskiej Hutnika Kraków o nazwie {{building.name}}"
+                title="Zdjęcie z galerii obiektów Akademii Piłkarskiej Hutnika Kraków o nazwie {{building.name}}">
+            {% endthumbnail %}
+        </div>
+    </a>
+    {% endthumbnail %}
+    {% empty %}
+    <h3 class="col-12 mx-auto text-center">Brak zdjęć w galerii</h3>
+    {% endfor %}
+</div>
+
+{% endblock %}

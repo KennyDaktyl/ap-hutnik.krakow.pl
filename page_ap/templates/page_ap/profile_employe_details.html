@@ -1,0 +1,114 @@
+{% extends "page_ap/base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+{% load thumbnail %}
+<article class="col-12 mt-3 mx-auto p-0 m-0 text-center row">
+    <div class="col-lg-10 mx-auto text-right">
+        <a href="{% url 'user_update' pk=user.id %}"><button class="mr-auto btn btn-primary">Edytuj
+                użytkownika</button></a>
+        <a href="{% url 'profile_employee_update' pk=profile.id %}"><button class="mr-auto btn btn-primary">Edytuj
+                profil</button></a>
+    </div>
+    <div class="col-lg-11 row mx-auto text-center border border-primary d-flex align-items-start">
+        <div class="col-lg-4 mx-auto">
+            {% if profile.photo %}
+            {% if profile.photo|is_portrait %}
+            <div class="portrait">
+                {% thumbnail profile.photo "200x300" crop='center' format="WEBP" as im %}
+                <source srcset="{{ im }}" type="image/webp">
+                <img class="m-1" src="{{ MEDIA_URL }}{{im}}" alt="" title="">
+                {% endthumbnail %}
+            </div>
+            {% else %}
+            <div class="landscape">
+                {% thumbnail profile.photo "300x200" crop='center' format="WEBP"  as im %}
+                <source srcset="{{ im }}" type="image/webp">
+                <img class="m-1" src="{{ MEDIA_URL }}{{im}}" alt="" title="">
+                {% endthumbnail %}
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="portrait">
+                {% thumbnail profile.no_image.image "400" crop='center' format="WEBP"  as im %}
+                <source srcset="{{ im }}" type="image/webp">
+                <img class="card-img-top m-1" src="{{ MEDIA_URL }}{{im}}" alt="" title="">
+                {% endthumbnail %}</div>
+            {% endif %}
+
+        </div>
+        <div class="col-lg-6 mx-auto">
+            {% if user.is_active %}
+            <span class="col-12 text-success mx-auto text-center">Konto aktywne</span>
+            {% else %}
+            <span class="col-12 text-danger mx-auto text-center">Konto nieaktywne</span>
+            {% endif %}
+            <h4 class="col-12 mx-auto text-center">
+                {{profile.get_employe_position_display|upper}}
+            </h4>
+            <p class="col-12 mx-auto text-center"><small class="text-muted">{{profile.get_role_display}}</small></p>
+            <h4 class="col-12 mx-auto text-center">
+                {{profile.user.first_name}} {{profile.user.last_name}}
+            </h4>
+            <p class="col-12 mx-auto text-center">Data urodzenia: <small
+                    class="text-muted">{{profile.date_of_birth}}</small></p>
+            <p class="col-12 mx-auto text-center">Email: {{profile.user.email}}</p>
+            <p class="col-12 mx-auto text-center">Telefon: {{profile.phone_number}}</p>
+            <p class="col-12 mx-auto text-center">Certyfikaty: {{profile.certyficate}}</p>
+            <p class="col-12 mx-auto text-center">Czynny zawodnik:
+                {% if profile.is_player == True %}
+                {{profile.team_name}}
+                {% else %}
+                Aktualnie nie
+                {% endif %}
+            </p>
+            <p class="col-12 mx-auto text-center">Drużyny w akademii:</p>
+            {% for team in profile.teams %}
+            <p class="mx-auto row col-12 mb-3">
+                <a class="mx-auto" href="{% url 'team_details' slug=team.slug pk=team.id %}">
+                    {{team.yearbook.title}} {{team.name}}</a>
+                {% empty %}
+                <li class="mx-auto text-center list-group-item col-lg-4">
+                    Brak drużyny
+                </li>
+            </p>
+            {% endfor %}
+            <div class="col-12">
+                <p class="col-12 mx-auto text-center mt-3 border-bottom border-primary">Opis kariery:</p>
+                <p class="col-12 mx-auto text-justify">{{profile.text|safe}}</p>
+            </div>
+        </div>
+
+        <div class="col-lg-2 row mx-auto text-center m-0 p-1">
+            <a class="col-12 mt-3" href="{% url 'add_yearbook' %}"><button class="col-12 mr-auto btn btn-success">Dodaj
+                    rocznik</button></a>
+            <a class="col-12 mt-3" href="{% url 'add_team' %}"><button class="col-12 mr-auto btn btn-success">Dodaj
+                    drużynę</button></a>
+            <a class="col-12 mt-3" href="{% url 'add_post' %}"><button class="col-12 mr-auto btn btn-success">Dodaj
+                    Newsa</button>
+            </a>
+            <a class="col-12 mt-3" href="{% url 'my_players_list' pk=profile.id %}"><button
+                    class="col-12 mr-auto btn btn-success">Lista
+                    zawodników</button>
+            </a>
+            <a class="col-12 mt-3" href="{% url 'teams_list'  %}"><button class="col-12 mr-auto btn btn-success">Lista
+                    drużyn</button>
+            </a>
+            <a class="col-12 mt-3" href="{% url 'sending_email'  %}"><button
+                    class="col-12 mr-auto btn btn-success">Wyślij wiadomiość Email</button>
+            </a>
+            <a class="col-12 mt-3" href="{% url 'upload_file'  %}"><button
+                    class="col-12 mr-auto btn btn-success">Załaduj pliki</button>
+            </a>
+        </div>
+    </div>
+</article>
+
+
+
+</div>
+</article>
+
+
+{% endblock %}

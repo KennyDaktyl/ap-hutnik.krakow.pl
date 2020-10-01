@@ -1,0 +1,88 @@
+{% extends "page_ap/base.html" %}
+{% load templatetag %}
+{% block head %}
+<meta property="fb:app_id" content="{{app_id}}" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Obiekty Akademii Piłkarskiej Hutnik Kraków">
+<meta property="og:url" content="{{request.build_absolute_uri}}" />
+<meta property="og:title" content="Lista obiektów Akademii Piłkarskiej Hutnika Kraków" />
+<!-- <meta property="og:image" content="https://ap-hutnik.krakow.pl{{ MEDIA_URL }}/{{building.photo}}" /> -->
+<meta property="og:description" content="Lista biektów Akademii Piłkarskiej Hutnika Kraków" />
+<meta name="description"
+    content="Lista obiektów Akademii Piłkarskiej Hutnika Kraków. Mamy wiele nowoczesnych obiektów trawiastych, ze sztuczną nawierzchnią wraz z oświetleniem oraz halę sportową. Dzięki temu treningi odbywają się cały pełny sezon.">
+{% endblock %}
+{% block title %}Lista obiektów Akademii Piłkarskiej Hutnika Kraków{% endblock %}
+
+{% block content %}
+{% load thumbnail %}
+<div class="col-12 row m-0 p-0">
+
+    <article class="col-10 mx-auto p-0 m-0 text-center row">
+        <h1 class="mx-auto col-12 text-left mt-3">Baza treningowa</h1>
+        {% for building in buildings %}
+        <div class="card col-lg-5 mx-auto mt-3 mb-3 p-2 text-center">
+            <a class="col-12 m-0 p-0 mx-auto text-center"
+                href="{% url 'building_details' slug=building.slug pk=building.id %}">
+                {% thumbnail building.photo "960" crop='center' as im %}
+                <source srcset="{{ im }}" type="image/webp" />
+                <img class="card-img-top m-1 p-1 mx-auto" src="{{ MEDIA_URL }}{{im}}" width="100%"
+                    alt="Główne zdjęcie obiektu Akademii Piłkarskiej Hutnika Kraków o nazwie {{building.name}}"
+                    title="Główne zdjęcie obiektu Akademii Piłkarskiej Hutnika Kraków o nazwie {{building.name}}">
+                {% endthumbnail %}
+                <div class="mt-2 col-12 m-0 p-0">
+                    <h5 class="card-title ">{{building.name|upper}}</h5>
+                    <div class="card-footer col-12 m-0 p-0">
+                        <small class="text-muted">Rozmiar: {{building.size}}</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        <div class="col-12 input-group mb-3 mx-auto text-center text-wrap nav-scroller py-1 mb-2 nav_pagi">
+            <div class=""></div>
+            <nav aria-label="..." class="nav d-flex justify-content-center mx-auto text-center">
+                {% if buildings.has_other_pages %}
+                <ul class="pagination text-dark pagination pagination-lg flex-wrap text-wrap mx-auto text-center">
+                    {% if buildings.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link text-primary"
+                            href="?{% query_transform page=buildings.previous_page_number %}">Poprzednia</a>
+                    </li>
+                    <li class="page-item"><a class="page-link text-primary"
+                            href="?{% query_transform page=buildings.previous_page_number %}">&laquo;</a></li>
+                    {% else %}
+                    <li class="disabled"><span></span></li>
+                    {% endif %}
+                    {% for i in buildings.paginator.page_range %}
+                    {% if buildings.number == i %}
+                    <li class="page-item text-light text-primary active">
+                        <span class="page-link text-light text-primary">
+                            {{ i }}
+                            <span class="sr-only text-dark">(current)</span>
+                        </span>
+                    </li>
+                    {% else %}
+                    <li class="page-item text-primary"></li><a class="page-link text-primary"
+                        href="?{% query_transform  page=i  %}">{{ i }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if buildings.has_next %}
+                    <li class="page-item text-primary"><a class="page-link text-primary"
+                            href="?{% query_transform page=buildings.next_page_number %}">&raquo;</a>
+                    </li>
+
+                    <li class="page-item text-primary ">
+                        <a class="page-link text-primary"
+                            href="?{% query_transform page=buildings.next_page_number %}">Następna</a>
+                    </li>
+                    {% else %}
+                    <li class="disabled"><span></span></li>
+                    {% endif %}
+                </ul>
+                {% endif %}
+            </nav>
+    </article>
+</div>
+
+{% endblock %}

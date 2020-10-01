@@ -1,0 +1,183 @@
+{% extends "page_ap/base.html" %}
+{% load templatetag %}
+{% block head %}
+<meta property="fb:app_id" content="{{app_id}}" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="{{request.build_absolute_uri}}" />
+<meta property="og:title" content="Drużyna Akademii Hutnika Kraków {{team.yearbook.title}} {{team.name}}" />
+<meta property="og:image" content="https://ap-hutnik.krakow.pl{{ MEDIA_URL }}{{team.photo}}" />
+<meta name="description" content="Artykuł Akademii Piłkarskiej Hutnika Kraków o tytule {{post.title}}">
+{% endblock %}
+{% block title %}{{team.yearbook.title}} {{team.name}}|Drużyna Akademii Piłkarskiej Hutnika Kraków {% endblock %}
+
+{% block content %}
+<article class="col-10 mx-auto p-0 m-0 text-center row">
+    <h5 class="card-title font-weight-bold text-center col-12 m-0 p-0 mt-3">Nazwa:<br> {{team.yearbook.title}} -
+        {{team.name|upper}}</h5>
+    <div class="card mb-3 mt-3 mx-auto col-12">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                {% if team.photo %}
+                {% load thumbnail %}
+                {% thumbnail team.photo "1280" crop="center" format="WEBP" as im %}
+                <a href="{{ MEDIA_URL }}{{im}}" data-lightbox="{{team.id}}" data-title="{{team.name}}"
+                    class="col-4 col-lg-3 mx-auto text-center p-0 m-0">
+                    <source srcset="{{ im }}" type="image/webp">
+                    <div class="">
+                        {% thumbnail team.photo "400" crop='center' format="WEBP"  as im %}
+                        <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}"
+                            alt="Główne zdjęcie drużyny Akademii Piłkarskiej Hutnika Kraków {{team.yearbook.title}} {{team.name}}"
+                            title="">
+                        {% endthumbnail %}
+                    </div>
+                </a>
+                {% endthumbnail %}
+                {% else %}
+                <div class="portrait">
+                    {% thumbnail team.no_image.image "200x200" crop='center' format="WEBP"  as im %}
+                    <source srcset="{{ im }}" type="image/webp">
+                    <img class="card-img-top m-1" src="{{ MEDIA_URL }}{{im}}" alt="" title="">
+                    {% endthumbnail %}</div>
+                {% endif %}
+                <div class="col-12 mx-auto mt-3">
+                    <h5 class="card-title font-weight-bold col-12">Treningi:</h5>
+                    {% for training in team.trainings %}
+                    <div class="row col-12 text-center mt-2 mb-2 ml-0 mr-0">
+                        <p class="col-12 text-center m-0 p-0">{{training.get_day_time_display}}<br>
+                            {{training.date_start}} - {{training.date_start}}</p>
+                        <a class="col-12 text-center m-0 p-0"
+                            href="{% url 'building_details' slug=training.place.slug pk=training.place.id %}">{{training.place}}</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h4 class="text-center col-12 card-title">Trener:</h4>
+                    <a href="{% url 'coach_details' slug=team.coach.slug pk=team.coach.id %}">
+                        <p class="mx-auto">{{team.coach.user.first_name}} {{team.coach.user.last_name}}</p>
+                    </a>
+                    <div class="mx-auto col-12 text-center row">
+                        {% if team.team_persons %}
+                        <h5 class="col-12 text-center card-title">Sztab trenerski:</h5>
+                        {% for person in team.team_persons.all %}
+                        <div class="row mx-auto col-12">
+                            <span class="text-mutted col-12">{{person.get_role_display}}</span>
+                            <a href="{% url 'player_details' slug=person.slug pk=person.id %}"
+                                class="card-title mx-auto">
+                                <span class="text-mutted col-12">{{person.user.first_name}}
+                                    {{person.user.last_name}},</span></a>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <p class="card-title mt-3 p-0 mb-0 font-weight-bold">Bramkarze:</p>
+                    {% for player in team.goalkippers %}
+                    <a href="{% url 'player_details' slug=player.slug pk=player.id %}">
+                        <span> {{player.user.first_name}}
+                            {% if player.rodo %}
+                            {{player.user.last_name}},
+                            {% else %}
+                            {{player.user.last_name|slice:1}}. ,
+                            {% endif %}
+                        </span></a>
+                    {% endfor %}
+                    <p class="card-title mt-3 p-0 mb-0 font-weight-bold">Obrońcy:</p>
+                    {% for player in team.defenders %}
+                    <a href="{% url 'player_details' slug=player.slug pk=player.id %}">
+                        <span>{{player.user.first_name}} {% if player.rodo %}
+                            {{player.user.last_name}},
+                            {% else %}
+                            {{player.user.last_name|slice:1}}. , {% endif %}</span></a>
+                    {% endfor %}
+                    <p class="card-title mt-3 p-0 mb-0 font-weight-bold">Pomocnicy:</p>
+                    {% for player in team.middfields %}
+                    <a href="{% url 'player_details' slug=player.slug pk=player.id %}">
+                        <span>{{player.user.first_name}} {% if player.rodo %}
+                            {{player.user.last_name}},
+                            {% else %}
+                            {{player.user.last_name|slice:1}}. ,{% endif %}</span></a>
+                    {% endfor %}
+                    <p class="card-title mt-3 p-0 mb-0 font-weight-bold">Napastnicy:</p>
+                    {% for player in team.attacks %}
+                    <a href="{% url 'player_details' slug=player.slug pk=player.id %}">
+                        <span>{{player.user.first_name}}
+                            {% if player.rodo %}
+                            {{player.user.last_name}},
+                            {% else %}
+                            {{player.user.last_name|slice:1}}. , {% endif %}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+
+<div class="col-11 row mx-auto text-center">
+    <h3 class="col-12 mx-auto text-center">GALERIA ZDJĘĆ</h3>
+    {% load thumbnail %}
+    {% for image in team_gallery %}
+    {% thumbnail image.image "350" crop='center' format="WEBP"  as im %}
+    <a href="{{ MEDIA_URL }}{{image.image}}" data-lightbox="{{team.id}}" data-title="{{team.name}}"
+        class="col-4 mt-3 col-lg-2 mx-auto text-center p-0 m-0">
+        <source srcset="{{ im }}" type="image/webp">
+        <div class="">
+            {% thumbnail image.image "250x200" crop='center' format="WEBP"  as im %}
+            <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}" alt="Zdjęcie z galerii drużyny Akademii Piłkarskiej Hutnika Kraków {{team.yearbook.title}} {{team.name}}" title="">
+            {% endthumbnail %}
+        </div>
+    </a>
+    {% endthumbnail %}
+    {% empty %}
+    <h3 class="col-12 mx-auto text-center">Brak zdjęć w galerii</h3>
+    {% endfor %}
+</div>
+
+<div class="col-12 input-group mb-3 mx-auto text-center text-wrap nav-scroller py-1 mb-2 nav_pagi">
+    <div class=""></div>
+    <nav aria-label="..." class="nav d-flex justify-content-center mx-auto text-center">
+        {% if team_gallery.has_other_pages %}
+        <ul class="pagination text-dark pagination pagination-lg flex-wrap text-wrap mx-auto text-center">
+            {% if team_gallery.has_previous %}
+            <li class="page-item">
+                <a class="page-link text-primary"
+                    href="?{% query_transform page=team_gallery.previous_page_number %}">Poprzednia</a>
+            </li>
+            <li class="page-item"><a class="page-link text-primary"
+                    href="?{% query_transform page=team_gallery.previous_page_number %}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span></span></li>
+            {% endif %}
+            {% for i in team_gallery.paginator.page_range %}
+            {% if team_gallery.number == i %}
+            <li class="page-item text-light text-primary active">
+                <span class="page-link text-light text-primary">
+                    {{ i }}
+                    <span class="sr-only text-dark">(current)</span>
+                </span>
+            </li>
+            {% else %}
+            <li class="page-item text-primary"></li><a class="page-link text-primary"
+                href="?{% query_transform  page=i  %}">{{ i }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if team_gallery.has_next %}
+            <li class="page-item text-primary"><a class="page-link text-primary"
+                    href="?{% query_transform page=team_gallery.next_page_number %}">&raquo;</a>
+            </li>
+
+            <li class="page-item text-primary ">
+                <a class="page-link text-primary"
+                    href="?{% query_transform page=team_gallery.next_page_number %}">Następna</a>
+            </li>
+            {% else %}
+            <li class="disabled"><span></span></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </nav>
+</div>
+
+
+{% endblock %}

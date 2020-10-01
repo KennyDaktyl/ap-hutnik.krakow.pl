@@ -1,0 +1,107 @@
+{% extends "page_ap/base.html" %}
+
+
+{% block title %}
+{% if profile.rodo == True %}
+Piłkarz Akademii Hutnika | {{profile.user.first_name}}
+{{profile.user.last_name}} {{profile.get_position_display}}
+{% else %}
+Piłkarz Akademii Hutnika | {{profile.get_position_display}}
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+{% load thumbnail %}
+<article class="col-12 mt-3 mx-auto p-0 m-0 text-center row">
+    <div class="col-lg-11 row mx-auto text-center border border-primary d-flex align-items-start">
+        {% if profile.rodo %}
+        <div class="col-lg-4 mx-auto">
+            {% if profile.photo %}
+            {% if profile.photo|is_portrait %}
+            <div class="portrait">
+                {% thumbnail profile.photo "960" crop='center' format="WEBP"  as im %}
+                <a href="{{ MEDIA_URL }}{{im}}" data-lightbox="{{profile.id}}"
+                    data-title="{{profile.user.first_name}} {{profile.user.last_name}} {{profile.get_position_display}} "
+                    class="col-4 col-lg-3 mx-auto text-center p-0 m-0">
+                    <source srcset="{{ im }}" type="image/webp">
+                    <div class="m-1">
+                        {% thumbnail profile.photo "400" crop='center' format="WEBP"  as im %}
+                        <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}" alt="" title="">
+                        {% endthumbnail %}
+                    </div>
+                </a>
+                {% endthumbnail %}
+            </div>
+            {% else %}
+            <div class="landscape">
+                {% thumbnail profile.photo "960" crop='center' format="WEBP"  as im %}
+                <a href="{{ MEDIA_URL }}{{im}}" data-lightbox="{{profile.id}}"
+                    data-title="{{profile.user.first_name}} {{profile.user.last_name}} "
+                    class="col-4 col-lg-3 mx-auto text-center p-0 m-0">
+                    <source srcset="{{ im }}" type="image/webp">
+                    <div class="m-1">
+                        {% thumbnail profile.photo "400" crop='center' format="WEBP"  as im %}
+                        <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}" alt="" title="">
+                        {% endthumbnail %}
+                    </div>
+                </a>
+                {% endthumbnail %}
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="portrait">
+                {% thumbnail profile.no_image.image "200x200" crop='center' format="WEBP"  as im %}
+                <source srcset="{{ im }}" type="image/webp">
+                <img class="card-img-top m-1" src="{{ MEDIA_URL }}{{im}}" alt="" title="">
+                {% endthumbnail %}</div>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="col-lg-4 mx-auto"></div>{% endif %}
+        <div class="col-lg-6 mx-auto">
+            <h4 class="col-12 mx-auto text-center">
+                {{profile.get_position_display|upper}}
+            </h4>
+            <!-- <p class="col-12 mx-auto text-center"><small class="text-muted">{{profile.get_role_display}}</small></p> -->
+            <h4 class="col-12 mx-auto text-center">
+                {{profile.user.first_name}}
+                {% if profile.rodo %}
+                {{profile.user.last_name}}
+                {% else %}
+                {{profile.user.last_name|slice:1}}.
+                {% endif %}
+            </h4>
+            <p class="col-12 mx-auto text-center">Data urodzenia: <small
+                    class="text-muted">{{profile.date_of_birth}}</small></p>
+            <p class="col-12 mx-auto text-center">Data rozpoczęcia kariery:
+                {% if profile.date_of_start %}
+                {{profile.date_of_start}}
+                {% else %}
+                Brak danych
+                {% endif %}
+            </p>
+            <p class="col-12 mx-auto text-center">
+                {% if profile.is_pupil %}
+                Wychowanek akademii: TAK
+                {% else %}
+                Wychowanek akademii: NIE <br>
+                {% if profile.from_team %}
+                Poprzedni klub: {{profile.from_team}}
+                {% endif %}
+                {% endif %}
+            </p>
+            <p class="col-12 mx-auto text-center">Drużyna:</p>
+            <a class="mx-auto" href="{% url 'team_details' slug=profile.team.slug pk=profile.team.id %}">
+                {{profile.team.yearbook.title}} {{profile.team.name}}</a>
+            </p>
+            <div class="col-12">
+                <p class="col-12 mx-auto text-center mt-3 border-bottom border-primary">Opis kariery:</p>
+                {% if profile.text %}
+                <p class="col-12 mx-auto text-justify">{{profile.text|safe}}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</article>
+{% endblock %}

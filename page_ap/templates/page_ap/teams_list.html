@@ -1,0 +1,72 @@
+{% extends "page_ap/base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<div class="col-12">
+
+    <table class="table">
+        <h1>{{team}}</h1>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Rocznik</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Trener</th>
+                <th scope="col">Treningi</th>
+                <th scope="col">Status</th>
+                <th scope="col">Sztab trenerski</th>
+                <th scope="col">Dodaj/Usuń się do sztabu tr.</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for team in teams %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{team.yearbook.title}}</td>
+                <td>{{team.name}}</td>
+                <td>{{team.coach.user.first_name}} {{team.coach.user.last_name}}</td>
+                <td>{% for training in team.trainings %}
+                    <a href="{% url 'del_training' pk=training.id %}">
+                        <i class="fas fa-trash"></i></a>
+                    <a href="{% url 'update_training' pk=training.id %}">
+                        <i class="fas fa-edit"></i></a>
+                    {{training}},<br>
+                    {% endfor %}
+                    <br>
+                    <a class="col-12 mt-3" href="{% url 'add_training' pk=team.id %}"><button
+                            class="col-12 mr-auto btn btn-success">Dodaj trening</button>
+                    </a>
+                </td>
+                <td>{% if team.archive %}
+                    <p class="text-danger">Drużyna archiwalna</p>
+                    {% else %}
+                    <p class="text-success">Drużyna aktualna</p>
+                    {% endif %}
+                </td>
+                <td>{% for person in team.team_persons.all %}
+                    <p class="">{{person.get_role_display}} {{person.user.first_name}}
+                        {{person.user.last_name}},</p>
+                    {% endfor %}
+                </td>
+                <td>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input name="person" type="hidden" value="{{request.user.profile.id}}">
+                        <input name="team" type="hidden" value="{{team.id}}">
+                        {% if request.user.profile in team.team_persons.all %}
+                        <button name="add" class="btn btn-success" type="submit">Jesteś w sztabie
+                        </button>
+                        {% else %}
+                        <button name="active" class="btn btn-danger" type="submit">Nie jesteś w sztabie
+                        </button>
+                        {% endif %}
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

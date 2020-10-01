@@ -1,0 +1,13 @@
+{% extends 'page_ap/base.html' %}
+{% load crispy_forms_tags %}
+{% crispy form.helper %}
+
+{% block content %}
+<div class="row col-10 mt-2 text-center ">
+    <form class="mx-auto" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Edytuj">
+    </form>
+</div>
+{% endblock %}

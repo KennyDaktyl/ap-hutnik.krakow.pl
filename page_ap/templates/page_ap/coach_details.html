@@ -1,0 +1,132 @@
+{% extends "page_ap/base.html" %}
+{% load crispy_forms_tags %}
+{% crispy form.helper %}
+
+{% block head %}
+<meta property="fb:app_id" content="{{app_id}}" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name"
+    content="Trener Akademii Piłkarskiej Hutnik Kraków {{coach.user.first_name}} {{coach.user.last_name}}">
+<meta property="og:url" content="{{request.build_absolute_uri}}" />
+<meta property="og:title"
+    content="Trener Akademii Piłkarskiej Hutnika Kraków {{coach.user.first_name}} {{coach.user.last_name}}" />
+<meta property="og:image" content="https://ap-hutnik.krakow.pl{{ MEDIA_URL }}/{{coach.photo}}" />
+<meta property="og:description" content="Trener Akademii Piłkarskiej Hutnika Kraków" />
+<meta name="description"
+    content="Trener Akademii Piłkarskiej Hutnika Kraków {{coach.user.first_name}} {{coach.user.last_name}}">
+{% endblock %}
+
+{% block title %}Trener Akademii Piłkarskiej Hutnika Kraków {{coach.user.first_name}}
+{{coach.user.last_name}}{% endblock %}
+
+{% block content %}
+{% load thumbnail %}
+<article class="col-lg-10 mx-auto p-0 m-0 text-center row">
+    <div class="card mb-3 mt-3 mx-auto col-12">
+        <div class="row no-gutters col-12 m-1 p-1 mx-auto text-center">
+            <div class="col-lg-4 mx-auto text-center m-0 p-0">
+                {% if coach.photo %}
+                {% if coach.photo|is_portrait %}
+                <div class="portrait">
+                    {% thumbnail coach.photo "960" crop='center' format="WEBP"  as im %}
+                    <a href="{{ MEDIA_URL }}{{im}}" data-lightbox="{{coach.id}}"
+                        data-title="{{coach.user.first_name}} {{coach.user.last_name}} {{coach.get_employe_position_display}} "
+                        class="col-4 col-lg-3 mx-auto text-center p-0 m-0">
+                        <source srcset="{{ im }}" type="image/webp">
+                        <div class="m-1">
+                            {% thumbnail coach.photo "400" crop='center' format="WEBP"  as im %}
+                            <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}"
+                                alt="Trener Akademii Piłkarskiej Hutnika Kraków {{coach.user.first_name}}"
+                                title="Trener Akademii Piłkarskiej Hutnika Kraków {{coach.user.first_name}}">
+                            {% endthumbnail %}
+                        </div>
+                    </a>
+                    {% endthumbnail %}
+                </div>
+                {% else %}
+                <div class="landscape">
+                    {% thumbnail coach.photo "960" crop='center' format="WEBP"  as im %}
+                    <a href="{{ MEDIA_URL }}{{im}}" data-lightbox="{{coach.id}}"
+                        data-title="{{coach.user.first_name}} {{coach.user.last_name}} "
+                        class="col-4 col-lg-3 mx-auto text-center p-0 m-0">
+                        <source srcset="{{ im }}" type="image/webp">
+                        <div class="m-1">
+                            {% thumbnail coach.photo "400" crop='center' format="WEBP"  as im %}
+                            <img class="col-12 mx-auto" src="{{ MEDIA_URL }}{{im}}"
+                                alt="Trener Akademii Piłkarskiej Hutnika Kraków {{coach.user.first_name}}"
+                                title="Trener Akademii Piłkarskiej Hutnika Kraków {{coach.user.first_name}}">
+                            {% endthumbnail %}
+                        </div>
+                    </a>
+                    {% endthumbnail %}
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="portrait mx-auto">
+                    {% thumbnail coach.no_image.image "200x200" crop='center' format="WEBP"  as im %}
+                    <source srcset="{{ im }}" type="image/webp">
+                    <img class="card-img-top m-1" src="{{ MEDIA_URL }}{{im}}" alt="" title="">
+                    {% endthumbnail %}</div>
+                {% endif %}
+
+            </div>
+            <div class="col-lg-8 mx-auto text-center m-0 p-0">
+                <div class="card-body text-center col-12 m-0 p-0 mt-2">
+                    <h4 class="card-title">{{coach.get_employe_position_display}}</h4>
+                    <h5 class="card-title">{{coach.user.first_name}} {{coach.user.last_name}}</h5>
+                    {% if coach.certyficate %}
+                    <h6 class="card-text mt-1">{{coach.certyficate}}</h6>
+                    {% endif %}
+                    <p class="card-text"><small class="text-muted">Data urodzenia: {{coach.date_of_birth}}
+                        </small></p>
+                    {% if coach.phone_number %}
+                    <p class="card-text mt-1">Kontakt do trenera: {{coach.phone_number}}</p>
+                    {% endif %}
+                    <h5 class="card-title">Drużyny prowadzone w akademii:</h5>
+                    <ul class="mx-auto text-center col-12 list-group m-0 p-0">
+                        {% for team in teams.all %}
+                        <li class="mx-auto text-center list-group-item col-lg-4">
+                            <a href="{% url 'team_details' slug=team.slug pk=team.id %}">
+                                {{team.yearbook.title}} {{team.name}}</a>
+                        </li>
+                        {% empty %}
+                        <li class="mx-auto text-center list-group-item col-lg-4">
+                            Brak drużyny
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% if coach.is_player != False and coach.team_name != None %}
+                    <h5 class="card-title mt-3">W roli zawodnika gra w: {{coach.team_name}}</h5>
+                    {% endif %}
+
+                    <!-- <p class="card-text mt-1">email: {{coach.user.email}}</p> -->
+                    {% if coach.text %}
+                    <p class="card-text mt-1 text-center mx-auto">Karieria: {{coach.text|safe}}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+<div class="col-lg-12 mx-auto p-0 m-0 text-center bg-primary text-white contact">
+    <h3 class="mx-auto col-12 mt-2">Kontakt email</h3>
+    <form method="POST" enctype="multipart/form-data" class="col-lg-8 mx-auto text-center uniForm">
+        {% csrf_token %}
+        <div class="m-2 p-1 mx-auto text-center text-white">
+            {{ contact_form.email|as_crispy_field}}
+        </div>
+        <div class="m-2 p-1 mx-auto text-center text-white">
+            {{ contact_form.subject|as_crispy_field}}
+        </div>
+        <div class="m-2 p-1 mx-auto text-center text-white">
+            {{ contact_form.message|as_crispy_field}}
+        </div>
+        <div class="m-2 p-1 mx-auto text-center text-white">
+            {{ contact_form.captcha|as_crispy_field}}
+        </div>
+        <input style="margin-top: 100px;" type="submit" value="Wyślij email">
+    </form>
+</div>
+
+
+{% endblock %}

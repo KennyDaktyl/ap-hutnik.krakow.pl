@@ -1,0 +1,10 @@
+{% extends "page_ap/base.html" %}
+
+{% block title %}Wystąpił błąd serwera{% endblock %}
+
+{% block content %}
+<div id="404" class="col-12 text-center mx-auto">
+    <h1 class="text-warning mx-auto text-center">Wystąpił błąd serwera</h1>
+    <p>{{ exception }}</p>
+</div>
+{% endblock %}
