@@ -20,7 +20,7 @@
 <p class="col-12 text-center mx-auto text-primary">
   Nazwa użytkownika lub hasło są nieprawidłowe.
   Spróbuj ponownie.
-  {% for key,value in user_form.errors.items %}
+  {% for key,value in form.errors.items %}
   <li class="text-primary">{{ key|escape }} : {{ value|escape }}</li>
   {% endfor %}
 </p>
