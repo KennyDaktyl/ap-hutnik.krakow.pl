@@ -24,6 +24,7 @@ from .models import *
 from django.core.paginator import Paginator
 from account.forms import *
 from .forms import *
+from .functions import *
 from django import forms
 from account.task import send_email_task, send_email_task_file
 
@@ -38,6 +39,7 @@ from django.conf import settings
 r = redis.StrictRedis(host=settings.REDIS_HOST,
                       port=settings.REDIS_PORT,
                       db=settings.REDIS_DB)
+
 
 
 # Create your views here.
@@ -57,14 +59,6 @@ class MainView(View):
         most_viewed = list(Post.objects.filter(pk__in=post_ranking_ids))
         most_viewed.sort(key=lambda x: post_ranking_ids.index(x.id))
         total_views = r.incr('page')
-
-        dt = datetime.now().date()
-        dt_views = r.get(str(dt))
-        if dt_views != None:
-            td_views = r.incr(str(dt))
-        else:
-            td_views = r.incr(str(dt))
-
         ctx = {
             'teams': teams,
             'news': news,

@@ -7,7 +7,7 @@ r = redis.StrictRedis(host=settings.REDIS_HOST,
                       db=settings.REDIS_DB)
 import os
 from datetime import datetime
-
+from .functions import *
 
 def cookielaw(request):
     cookielaw = request.COOKIES.get('cookielaw_accepted')
@@ -22,15 +22,11 @@ def values(request):
     c = Profile.objects.all().count()
     app_id = os.environ.get('APP_ID')
 
-    dt = datetime.now().date()
-    dt_views = r.get(str(dt))
-    dt_views = str(dt_views)
-    dt_views = dt_views.replace("b'", "")
-    dt_views = dt_views.replace("'", "")
+    dt, number = get_daily_counter(r)
     ctx = {
         "e": s,
         "c": c,
-        "dt_views": dt_views,
+        "dt_views": number,
         'app_id': app_id,
         "logo": logo,
         "version": "1.0",
