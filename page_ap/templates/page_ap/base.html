@@ -57,7 +57,7 @@
         </div>
     </div>
     <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-primary  p-0 border fixed-top">
-        <a class="navbar-brand ml-1" href="/" title="Klikalne logo akademii piłkarskiej przechodzące do głównego menu">
+        <a class="navbar-brand ml-1 " href="/" title="Klikalne logo akademii piłkarskiej przechodzące do głównego menu">
             {% thumbnail 'images/logo+akademii+pilkarskiej+hutnik+krakow.webp' "150" crop='center' format="WEBP" as im %}
             <source srcset="{{ im }}" type="image/webp">
             <img class="card-img-top m-1 mx-auto" src="{{ MEDIA_URL }}{{im}}"
@@ -111,10 +111,10 @@
             </ul>
         </div>
     </nav>
-    <div id="flag" class="col-12 mx-auto p-0">
+    <div id="flag" class="col-12 mx-auto text-center p-0">
         {% thumbnail 'images/flaga_akademi.webp' "800" crop='center' format="WEBP" as im %}
         <source srcset="{{ im }}" type="image/webp">
-        <img class="img-fluid img-thumbnail image mx-auto col-12 text-center m-0 p-0 ml-auto mr-auto flaga"
+        <img class="img-fluid img-thumbnail image mx-auto col-lg-10 text-center m-0 p-0 flaga"
             src="{{ MEDIA_URL }}{{im}}" alt="" title="">
         {% endthumbnail %}
     </div>

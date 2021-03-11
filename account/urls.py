@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from .views import *
+from account.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import url
@@ -40,10 +40,9 @@ urlpatterns = [
     path('rejestracja_pracownika/',
          RegisterEmployeView.as_view(),
          name='register_employe'),
-    path(
-        'activate/<slug:uidb64>/<slug:token>/',
-        Activate.as_view(),
-        name='activate'),
+    path('activate/<slug:uidb64>/<slug:token>/',
+         Activate.as_view(),
+         name='activate'),
     #     path('register/', Register.as_view(), name='register'),
     path('edit/', EditUser.as_view(), name='edit'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

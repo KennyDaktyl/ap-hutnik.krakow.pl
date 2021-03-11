@@ -33,10 +33,10 @@
             <img class="d-block w-100" src="{{MEDIA_URL}}{{post_first.photo}}"
                 alt="Główne zdjęcie artykułu o tytule {{post_first.title}}">
             <a href="{% url 'post_details' slug=post_first.slug pk=post_first.id %}">
-                <div class="carousel-caption title_carousel m-0 p-0 mx-auto ">
-                    <h1 class="text-white mt-2">{{post_first.title|upper}}</h1>
-                    <p class="text-white">{{post_first.body|slice:150|safe}}...</p>
-                    <p class="text-white">Autor: {{post_first.author.first_name}}
+                <div class="title_carousel m-0 p-0 mx-auto d-flex align-items-center row">
+                    <h1 class="text-white mt-2 col-12 align-self-center" style="min-height: 130px; text-align: center;">{{post_first.title|upper}}</h1>
+                    <p class="text-white col-12" style="min-height: 150px;">{{post_first.body|slice:350|safe}}...</p>
+                    <p class="text-white col-12">Autor: {{post_first.author.first_name}}
                         {{post_first.author.last_name}}, data:{{post_first.created}}</p>
                 </div>
             </a>
@@ -46,10 +46,10 @@
             <img class="d-block w-100" src="{{MEDIA_URL}}{{post.photo}}"
                 alt="Główne zdjęcie artykułu o tytule {{post.title}}">
             <a href="{% url 'post_details' slug=post.slug pk=post.id %}">
-                <div class="carousel-caption title_carousel m-0 p-0 mx-auto">
-                    <h1 class="text-white mt-2">{{post.title|upper}}</h1>
-                    <p class="text-white">{{post.body|slice:150|safe}}...</p>
-                    <p class="text-white">Autor: {{post.author.first_name}}
+                <div class="title_carousel m-0 p-0 mx-auto d-flex align-items-center row">
+                    <h1 class="text-white mt-2 col-12 align-self-center" style="min-height: 130px; text-align: center;">{{post.title|upper}}</h1>
+                    <p class="text-white col-12" style="min-height: 150px;">{{post.body|slice:350|safe}}...</p>
+                    <p class="text-white col-12">Autor: {{post.author.first_name}}
                         {{post.author.last_name}}, data:{{post_first.created}}</p>
                 </div>
             </a>
