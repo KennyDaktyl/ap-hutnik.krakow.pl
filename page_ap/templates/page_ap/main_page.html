@@ -93,7 +93,7 @@
                 <div class="card-body p-0 m-0">
                     <h5 class="card-title text-dark mt-2" style="min-height:50px;">{{post.title|slice:35}}...
                     </h5>
-                    <p class="card-text text-dark" style="min-height: 100px;">{{post.body|slice:350|safe}}...</p>
+                    <p class="card-text text-dark" style="min-height: 260px;">{{post.body|slice:300|safe}}...</p>
                 </div>
                 <div class="card-footer col-12 m-0 p-0 post align-items-end " style="min-height: 60px;">
                     {% if post.team %}
@@ -101,10 +101,10 @@
                             {{post.team}}</small>
                     </p>
                     {% else %}
-                    <p class="col-12 card-text p-0 m-0"><small class="text-white p-0 m-0">Post:
+                    <p class="card-text p-0 m-0"><small class="text-white p-0 m-0">Post:
                             ogólny</small></p>
                     {% endif %}
-                    <small class="col-12 text-white m-0 p-0">Autor: {{post.author.first_name}}
+                    <small class="text-white m-0 p-0">Autor: {{post.author.first_name}}
                         {{post.author.last_name}},<br> Data:
                         {{post.created}}</small>
                 </div>
