@@ -35,8 +35,8 @@
             <a href="{% url 'post_details' slug=post_first.slug pk=post_first.id %}">
                 <div class="title_carousel m-0 p-0 mx-auto d-flex align-items-center row">
                     <h1 class="text-white mt-2 col-12 align-self-center" style="min-height: 130px; text-align: center;">{{post_first.title|upper}}</h1>
-                    <p class="text-white col-12" style="min-height: 150px;">{{post_first.body|slice:350|safe}}...</p>
-                    <p class="text-white col-12">Autor: {{post_first.author.first_name}}
+                    <p class="post_text text-white col-12" style="min-height: 150px;">{{post_first.body|slice:350|safe}}...</p>
+                    <p class="post_text text-white col-12">Autor: {{post_first.author.first_name}}
                         {{post_first.author.last_name}}, data:{{post_first.created}}</p>
 
                 </div>
@@ -49,8 +49,8 @@
             <a href="{% url 'post_details' slug=post.slug pk=post.id %}">
                 <div class="title_carousel m-0 p-0 mx-auto d-flex align-items-center row">
                     <h1 class="text-white mt-2 col-12 align-self-center" style="min-height: 130px; text-align: center;">{{post.title|upper}}</h1>
-                    <p class="text-white col-12" style="min-height: 150px;">{{post.body|slice:350|safe}}...</p>
-                    <p class="text-white col-12">Autor: {{post.author.first_name}}
+                    <p class="post_text text-white col-12" style="min-height: 150px;">{{post.body|slice:350|safe}}...</p>
+                    <p class="post_text text-white col-12">Autor: {{post.author.first_name}}
                         {{post.author.last_name}}, data:{{post_first.created}}</p>
                 </div>
             </a>

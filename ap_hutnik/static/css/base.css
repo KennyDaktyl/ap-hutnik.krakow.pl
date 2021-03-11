@@ -69,7 +69,7 @@ p.posts {
 
 }
 
-p {
+p.post_text {
     font-size: 21px;
 }
 
@@ -279,9 +279,13 @@ input[type=submit] {
         font-size: 14px;
     }
 
-    p {
+    p.post_text {
         font-size: 13px;
     }
+
+    /* p.post_text {
+        font-size: 3px;
+    } */
 
     img.sponsor {
         width: 70px;
