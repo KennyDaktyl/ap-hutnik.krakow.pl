@@ -2,9 +2,12 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = [
     '51.75.127.94',
+    'ap-hutnik.krakow.pl',
+    'localhost',
+    '127.0.0.1',
 ]
 
 INSTALLED_APPS = [

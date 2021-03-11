@@ -1,6 +1,6 @@
 * {
     font-family: lato;
-    font-size: 14px;
+    /* font-size: 14px; */
 }
 
 
@@ -66,6 +66,11 @@ div.title_carousel {
 
 p.posts {
     color: #182B4B;
+
+}
+
+p {
+    font-size: 21px;
 }
 
 h1.posts {
@@ -274,6 +279,10 @@ input[type=submit] {
         font-size: 14px;
     }
 
+    p {
+        font-size: 13px;
+    }
+
     img.sponsor {
         width: 70px;
         height: 70px;
@@ -287,29 +296,3 @@ input[type=submit] {
 .navbar a {
     font-size: 12px;
 }
-
-
-/* 
-.myanimation {
-    -webkit-animation: simple 13s forwards linear;
-    animation-iteration-count: infinite;
-}
-
-@-webkit-keyframes simple {
-
-    0% {
-        -webkit-transform: translateX(-100%);
-        -moz-transform: translateX(-100%);
-        -ms-transform: translateX(-100%);
-        -o-transform: translateX(-100%);
-        transform: translateX(-100%);
-    }
-
-    100% {
-        -webkit-transform: translateX(100%);
-        -moz-transform: translateX(100%);
-        -ms-transform: translateX(100%);
-        -o-transform: translateX(100%);
-        transform: translateX(100%);
-    } */
-/* } */

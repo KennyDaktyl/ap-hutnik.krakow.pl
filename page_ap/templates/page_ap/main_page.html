@@ -38,7 +38,7 @@
                     <p class="text-white col-12" style="min-height: 150px;">{{post_first.body|slice:350|safe}}...</p>
                     <p class="text-white col-12">Autor: {{post_first.author.first_name}}
                         {{post_first.author.last_name}}, data:{{post_first.created}}</p>
-                        
+
                 </div>
             </a>
         </div>
@@ -93,7 +93,7 @@
                 <div class="card-body p-0 m-0">
                     <h5 class="card-title text-dark mt-2" style="min-height:50px;">{{post.title|slice:35}}...
                     </h5>
-                    <p class="card-text text-dark" style="min-height: 100px;">{{post.body|slice:150|safe}}...</p>
+                    <p class="card-text text-dark" style="min-height: 100px;">{{post.body|slice:350|safe}}...</p>
                 </div>
                 <div class="card-footer col-12 m-0 p-0 post align-items-end " style="min-height: 60px;">
                     {% if post.team %}
